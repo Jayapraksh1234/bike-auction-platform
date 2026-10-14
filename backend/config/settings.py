@@ -55,7 +55,7 @@ DATABASES = {"default": {
     "ENGINE": "django.db.backends.postgresql",
     "NAME": db_name, "USER": db_user, "PASSWORD": db_password,
     "HOST": db_host, "PORT": db_port,
-    "CONN_MAX_AGE": 60,
+    "CONN_MAX_AGE": 0,
     "OPTIONS": (
     {"sslmode": os.getenv("DB_SSLMODE")}
     if os.getenv("DB_SSLMODE")
