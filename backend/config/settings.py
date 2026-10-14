@@ -56,6 +56,11 @@ DATABASES = {"default": {
     "NAME": db_name, "USER": db_user, "PASSWORD": db_password,
     "HOST": db_host, "PORT": db_port,
     "CONN_MAX_AGE": 60,
+    "OPTIONS": (
+    {"sslmode": os.getenv("DB_SSLMODE")}
+    if os.getenv("DB_SSLMODE")
+    else {}
+),
 }}
 if os.getenv("DATABASE_URL"):
     # DATABASE_URL parsing intentionally omitted; configure DB_* variables or add dj-database-url.
