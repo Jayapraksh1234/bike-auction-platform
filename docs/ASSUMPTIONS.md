@@ -45,13 +45,13 @@
 
 ### Concurrent Bid Handling
 
-**Decision:** Bid processing must protect auction state when multiple users bid at approximately the same time.
+**Decision:** Process bids inside a database transaction using Django's `transaction.atomic()` and lock the relevant auction row using `select_for_update()`.
 
-**Benefit:** It helps prevent stale bids from incorrectly replacing newer accepted bids.
+**Implementation:** The backend retrieves the auction row with a row lock, checks the latest accepted bid, validates the submitted amount against the minimum permitted bid, and creates the bid within the transaction.
 
-**Trade-off:** Safe concurrency handling may require database transactions, row locking, or another atomic update strategy, adding implementation complexity.
+**Benefit:** On PostgreSQL, this approach serializes competing bid attempts for the same auction and helps prevent stale bids from being accepted based on outdated auction state.
 
-**Implementation note:** Document the exact transaction and locking mechanism used by the project rather than claiming a strategy that is not present in the code.
+**Trade-off:** Row locking can increase contention when multiple users bid on the same auction. Its behavior depends on database support and transaction configuration, so concurrency should be tested against the production database as well as locally.
 
 ### Cloud Deployment
 
