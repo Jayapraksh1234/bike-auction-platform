@@ -103,7 +103,7 @@ The bid endpoint requires the appropriate HTTP method and authentication. Exact 
 - **PostgreSQL:** Provides relational data storage and transaction support for auction and bid records.
 - **Hosted services:** Vercel, Render, and Supabase simplify deployment but introduce service limits and potential cold starts or database connection constraints.
 - **Server-side validation:** Adds backend processing but prevents users from bypassing client-side validation.
-- **Concurrency handling:** Bid processing must validate the latest auction state and safely handle simultaneous requests. The exact locking or transaction strategy should match the implementation in the source code.
+- - **Concurrency handling:** The bid endpoint uses Django's `transaction.atomic()` and `select_for_update()` to lock the auction row while validating and recording a bid. On PostgreSQL, this helps serialize competing bid attempts for the same auction. Concurrency behavior should also be tested under realistic production conditions.
 
 ## 9. Deployment Overview
 
